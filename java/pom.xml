@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.google.protobuf</groupId>
   <artifactId>protobuf-java</artifactId>
-  <version>2.4.1</version>
+  <version>2.4.1_nc</version>
   <packaging>jar</packaging>
   <name>Protocol Buffer Java API</name>
   <description>
@@ -76,15 +76,15 @@
             <id>generate-sources</id>
             <phase>generate-sources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <mkdir dir="target/generated-sources" />
-                <exec executable="../src/protoc">
+                <exec executable="protoc">
                   <arg value="--java_out=target/generated-sources" />
                   <arg value="--proto_path=../src" />
                   <arg value="../src/google/protobuf/descriptor.proto" />
                 </exec>
-              </tasks>
-              <sourceRoot>target/generated-sources</sourceRoot>
+              </target>
+              <!-- <SourceRoot>target/generated-sources</SourceRoot>-->
             </configuration>
             <goals>
               <goal>run</goal>
@@ -94,39 +94,74 @@
             <id>generate-test-sources</id>
             <phase>generate-test-sources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <mkdir dir="target/generated-test-sources" />
-                <exec executable="../src/protoc">
+                <exec executable="protoc">
                   <arg value="--java_out=target/generated-test-sources" />
                   <arg value="--proto_path=../src" />
                   <arg value="--proto_path=src/test/java" />
                   <arg value="../src/google/protobuf/unittest.proto" />
                   <arg value="../src/google/protobuf/unittest_import.proto" />
                   <arg value="../src/google/protobuf/unittest_mset.proto" />
-                  <arg
-                    value="src/test/java/com/google/protobuf/multiple_files_test.proto" />
+                  <arg value="src/test/java/com/google/protobuf/multiple_files_test.proto"/>
                   <arg value="src/test/java/com/google/protobuf/nested_builders_test.proto" />
                   <arg value="src/test/java/com/google/protobuf/nested_extension.proto" />
                   <arg value="src/test/java/com/google/protobuf/nested_extension_lite.proto" />
                   <arg value="src/test/java/com/google/protobuf/non_nested_extension.proto" />
                   <arg value="src/test/java/com/google/protobuf/non_nested_extension_lite.proto" />
                   <arg value="src/test/java/com/google/protobuf/test_bad_identifiers.proto" />
-                  <arg
-                    value="../src/google/protobuf/unittest_optimize_for.proto" />
-                  <arg
-                    value="../src/google/protobuf/unittest_custom_options.proto" />
+                  <arg value="../src/google/protobuf/unittest_optimize_for.proto"/>
+                  <arg value="../src/google/protobuf/unittest_custom_options.proto"/>
                   <arg value="../src/google/protobuf/unittest_lite.proto" />
                   <arg value="../src/google/protobuf/unittest_import_lite.proto" />
                   <arg value="../src/google/protobuf/unittest_lite_imports_nonlite.proto" />
                   <arg value="../src/google/protobuf/unittest_enormous_descriptor.proto" />
                   <arg value="../src/google/protobuf/unittest_no_generic_services.proto" />
                 </exec>
-              </tasks>
-              <testSourceRoot>target/generated-test-sources</testSourceRoot>
+                </target>
+                <!-- <testSourceRoot>target/generated-test-sources</testSourceRoot>-->
             </configuration>
             <goals>
               <goal>run</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/generated-sources</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/generated-test-sources</source>
+              </sources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
